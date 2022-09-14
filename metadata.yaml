@@ -1,4 +1,4 @@
 homepage: "https://daam.com.sa/"
 versions:
-  - sha: 5f02a788b90ae804f86b04aa24af8937e567874a
+  - sha: 291156c474638c565cc723e645ab6400e2e1609e
     changeNotes: Initial release.
