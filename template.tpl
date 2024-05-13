@@ -1,4 +1,4 @@
-﻿___TERMS_OF_SERVICE___
+___TERMS_OF_SERVICE___
 
 By creating or modifying this file you agree to Google Tag Manager's Community
 Template Gallery Developer Terms of Service available at
@@ -14,8 +14,10 @@ ___INFO___
   "version": 1,
   "securityGroups": [],
   "displayName": "Phone/Mobile Normalizer \u0026 SHA256 Hasher",
-  "categories": ["UTILITY"],
-  "description": "Use this variable to normalize \u0026 hash any phone/mobile number with SHA256 after formatting the value to the desired format. i.e. removing leading zero, plus sign, dashes, brackets, white spaces.",
+  "categories": [
+    "UTILITY"
+  ],
+  "description": "Use this variable to normalize \u0026 hash any phone/mobile number with SHA256 after formatting the value to the desired format. i.e. removing the leading zeros, plus sign, dashes, brackets, white spaces.",
   "containerContexts": [
     "SERVER"
   ]
@@ -57,7 +59,7 @@ ___TEMPLATE_PARAMETERS___
   {
     "type": "CHECKBOX",
     "name": "removeLeadingZero",
-    "checkboxText": "Remove Leading Zero \u002700\u0027",
+    "checkboxText": "Remove Leading Zeros \u002700\u0027",
     "simpleValueType": true
   },
   {
@@ -71,6 +73,13 @@ ___TEMPLATE_PARAMETERS___
     "name": "removeDashes",
     "checkboxText": "Remove Dashes \"-\"",
     "simpleValueType": true
+  },
+  {
+    "type": "TEXT",
+    "name": "addPrefixValue",
+    "displayName": "Enter The Required Prefix Here",
+    "simpleValueType": true,
+    "canBeEmptyString": true
   }
 ]
 
@@ -104,6 +113,7 @@ function hashFunction(input){
   if (data.removeLeadingZero) {toHash = toHash.replace('00', '');}
   if (data.removeBrackets) {toHash = replaceAll(replaceAll(toHash, '(', ''), ')', '');}
   if (data.removeDashes) {toHash = replaceAll(toHash, '-', '');}
+  toHash = data.addPrefixValue + toHash;
   
   return sha256Sync(toHash.trim().toLowerCase(), {outputEncoding: 'hex'});
 }
