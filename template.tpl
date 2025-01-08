@@ -17,7 +17,7 @@ ___INFO___
   "categories": [
     "UTILITY"
   ],
-  "description": "Use this variable to normalize \u0026 hash any phone/mobile number with SHA256 after formatting the value to the desired format. i.e. removing the leading zeros, plus sign, dashes, brackets, white spaces.",
+  "description": "Use this variable to normalize \u0026 hash any phone/mobile number with SHA256 after formatting the value to the desired format. i.e. removing leading zero, plus sign, dashes, brackets, white spaces.",
   "containerContexts": [
     "SERVER"
   ]
@@ -59,7 +59,7 @@ ___TEMPLATE_PARAMETERS___
   {
     "type": "CHECKBOX",
     "name": "removeLeadingZero",
-    "checkboxText": "Remove Leading Zeros \u002700\u0027",
+    "checkboxText": "Remove Leading Zero \u00270\u0027 OR \u002700\u0027",
     "simpleValueType": true
   },
   {
@@ -75,11 +75,33 @@ ___TEMPLATE_PARAMETERS___
     "simpleValueType": true
   },
   {
-    "type": "TEXT",
-    "name": "addPrefixValue",
-    "displayName": "Enter The Required Prefix Here",
+    "type": "CHECKBOX",
+    "name": "addPrefix",
+    "checkboxText": "Add Prefix",
     "simpleValueType": true,
-    "canBeEmptyString": true
+    "subParams": [
+      {
+        "type": "TEXT",
+        "name": "prefixToAdd",
+        "displayName": "Prefix To Add",
+        "simpleValueType": true,
+        "enablingConditions": [
+          {
+            "paramName": "addPrefix",
+            "paramValue": true,
+            "type": "EQUALS"
+          }
+        ]
+      }
+    ],
+    "defaultValue": true
+  },
+  {
+    "type": "CHECKBOX",
+    "name": "hash",
+    "checkboxText": "Make the output hashed (SHA256)",
+    "simpleValueType": true,
+    "defaultValue": true
   }
 ]
 
@@ -110,12 +132,17 @@ function hashFunction(input){
   if (data.removePlus){toHash = replaceAll(toHash, '+', '');}
   if (data.toLowerCase) {toHash = toHash.toLowerCase();}
   if (data.removeWhiteSpaces) {toHash = replaceAll(toHash, ' ', '');}
-  if (data.removeLeadingZero) {toHash = toHash.replace('00', '');}
+  
+  if (data.removeLeadingZero) {
+    if (toHash.indexOf('00') === 0) {toHash = toHash.slice(2);}
+    if (toHash.indexOf('0') === 0)  {toHash = toHash.slice(1);}}
+  
   if (data.removeBrackets) {toHash = replaceAll(replaceAll(toHash, '(', ''), ')', '');}
   if (data.removeDashes) {toHash = replaceAll(toHash, '-', '');}
-  toHash = data.addPrefixValue + toHash;
-  
-  return sha256Sync(toHash.trim().toLowerCase(), {outputEncoding: 'hex'});
+  if (data.addPrefix) {toHash = data.prefixToAdd + toHash;}
+  if (data.hash) {
+  return sha256Sync(toHash, {outputEncoding: 'hex'});}
+  else return toHash;
 }
 
 return hashFunction(toHash);
@@ -129,5 +156,3 @@ scenarios: []
 ___NOTES___
 
 Created on 8/15/2022, 5:25:17 PM
-
-
