@@ -1,4 +1,7 @@
 homepage: "https://daam.com.sa/"
 versions:
-  - sha: 291156c474638c565cc723e645ab6400e2e1609e
-    changeNotes: Initial release.
+  - sha: b35d4a94cdf9a0e0e3232a454a64e05b1ea0d320
+changeNotes:  
+  1. Improve handling of leading zero removal  
+  2. Add a configurable prefix option  
+  3. Provide an option to enable or disable hashing  
